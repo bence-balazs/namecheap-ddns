@@ -3,7 +3,7 @@
 # usage: ./namecheap-ddns.sh [-set] [-help]
 
 # set variables here
-HOSTNAME="blog"
+HOSTNAME="@"
 DOMAIN="domain.dev"
 SECRET_LOCATION="${HOME}/.namecheap-ddns"
 
@@ -30,6 +30,11 @@ set_password() {
 # compare two ip, if != run update script
 update_ip() {
     local DOMAIN_IP="$(dig ${HOSTNAME}.${DOMAIN} +short 2> /dev/null)"
+
+    if [ ${HOSTNAME} = "@" ]; then
+        local DOMAIN_IP="$(dig ${DOMAIN} +short 2> /dev/null)"
+    fi
+
     local HOST_IP="$(curl ifconfig.io 2> /dev/null)"
     local PASSWORD="$(cat ${SECRET_LOCATION})"
 
